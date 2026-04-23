@@ -1,0 +1,33 @@
+name: CT Tracker
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load previous ID
+        run: |
+          if [ -f last_id.txt ]; then
+            echo "LAST_ID=$(cat last_id.txt)" >> $GITHUB_ENV
+          fi
+
+      - name: Run checker
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          LAST_ID: ${{ env.LAST_ID }}
+        run: python3 ct_checker.py
+
+      - name: Save latest ID
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add last_id.txt
+          git diff --cached --quiet || git commit -m "Update CT ID"
+          git push
