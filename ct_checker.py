@@ -14,7 +14,7 @@ def fetch_json():
             r.raise_for_status()
             return r.json()
         except Exception as e:
-            print(f"Attempt {attempt+1} failed: {e}")
+            print(f"Attempt {attempt + 1} failed: {e}")
             time.sleep(5)
 
     raise Exception("API failed after 3 attempts")
@@ -35,9 +35,21 @@ if latest != LAST_ID:
                 "title": "🔥 New Contested Territory Event Detected!",
                 "color": 16753920,
                 "fields": [
-                    {"name": "CT ID", "value": latest, "inline": True},
-                    {"name": "Starts", "value": f"<t:{start_unix}:F>", "inline": False},
-                    {"name": "Ends", "value": f"<t:{end_unix}:F>", "inline": False}
+                    {
+                        "name": "CT ID",
+                        "value": latest,
+                        "inline": True
+                    },
+                    {
+                        "name": "Starts",
+                        "value": f"<t:{start_unix}:F>",
+                        "inline": False
+                    },
+                    {
+                        "name": "Ends",
+                        "value": f"<t:{end_unix}:F>",
+                        "inline": False
+                    }
                 ],
                 "footer": {
                     "text": "Bloons TD 6 CT Tracker"
@@ -52,19 +64,4 @@ if latest != LAST_ID:
         f.write(latest)
 
 else:
-    print("No new CT event.")                        "name": "Ends",
-                        "value": f"<t:{end_unix}:F>",
-                        "inline": False
-                    }
-                ],
-                "footer": {
-                    "text": "Bloons TD 6 CT Tracker"
-                }
-            }
-        ]
-    }
-
-    requests.post(WEBHOOK, json=payload)
-
-    with open("last_id.txt", "w") as f:
-        f.write(latest)
+    print("No new CT event.")
