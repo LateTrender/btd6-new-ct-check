@@ -8,6 +8,7 @@ WEBHOOK = os.environ["DISCORD_WEBHOOK"]
 LAST_ID = os.environ.get("LAST_ID", "")
 
 def fetch_json():
+def fetch_json():
     for attempt in range(3):
         try:
             r = requests.get(URL, timeout=30)
@@ -17,9 +18,13 @@ def fetch_json():
             print(f"Attempt {attempt + 1} failed: {e}")
             time.sleep(5)
 
-    raise Exception("API failed after 3 attempts")
+    print("API unavailable after retries, skipping this run.")
+    return None
 
 data = fetch_json()
+
+if data is None:
+    exit(0)
 
 event = data["body"][0]
 latest = event["id"]
