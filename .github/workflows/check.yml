@@ -25,7 +25,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           LAST_ID: ${{ env.LAST_ID }}
-        run: python3 ct_checker.py
+        run: python3 ct_checker.py || echo "API temporarily unavailable"
 
       - name: Save latest ID
         run: |
